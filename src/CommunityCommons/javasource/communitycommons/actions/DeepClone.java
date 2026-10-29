@@ -44,6 +44,7 @@ public class DeepClone extends UserAction<java.lang.Boolean>
 	private final java.lang.String reverseAssociations;
 	private final java.lang.String excludeEntities;
 	private final java.lang.String excludeModules;
+	private final java.lang.Boolean includeSystemAttributes;
 
 	public DeepClone(
 		IContext context,
@@ -53,7 +54,8 @@ public class DeepClone extends UserAction<java.lang.Boolean>
 		java.lang.String _membersToKeep,
 		java.lang.String _reverseAssociations,
 		java.lang.String _excludeEntities,
-		java.lang.String _excludeModules
+		java.lang.String _excludeModules,
+		java.lang.Boolean _includeSystemAttributes
 	)
 	{
 		super(context);
@@ -64,6 +66,7 @@ public class DeepClone extends UserAction<java.lang.Boolean>
 		this.reverseAssociations = _reverseAssociations;
 		this.excludeEntities = _excludeEntities;
 		this.excludeModules = _excludeModules;
+		this.includeSystemAttributes = _includeSystemAttributes;
 	}
 
 	@java.lang.Override
@@ -76,7 +79,7 @@ public class DeepClone extends UserAction<java.lang.Boolean>
 		java.lang.String excludeEntities     = this.excludeEntities == null     ? "" : this.excludeEntities;
 		java.lang.String excludeModules      = this.excludeModules == null      ? "" : this.excludeModules;
 
-		ORM.deepClone(getContext(), source, target, membersToSkip, membersToKeep, reverseAssociations, excludeEntities, excludeModules);
+		ORM.deepClone(getContext(), source, target, membersToSkip, membersToKeep, reverseAssociations, excludeEntities, excludeModules, includeSystemAttributes);
 		return true;
 		// END USER CODE
 	}

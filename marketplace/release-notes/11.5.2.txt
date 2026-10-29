@@ -1,0 +1,3 @@
+- We added the includeSystemAttributes parameter to the copyAttributes, Clone and DeepClone Java actions. When it is false, the system members __UUID__, createdDate, changedDate, owner and changedBy are not copied. When it is true or empty, the behavior is the same as before. (Ticket RUN-5257, GitHub issue 150)
+- We added the excludeAttributes parameter to the copyAttributes and Clone Java actions. It takes a comma separated list of member names that are not copied.
+- Existing microflows that call these actions must be updated to pass the new parameters. Pass true for includeSystemAttributes and an empty value for excludeAttributes to keep the old behavior.
