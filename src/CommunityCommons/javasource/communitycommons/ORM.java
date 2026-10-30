@@ -80,18 +80,20 @@ public class ORM {
 	}
 
 	public static void deepClone(IContext c, IMendixObject source, IMendixObject target, String membersToSkip, String membersToKeep, String reverseAssociations, String excludeEntities, String excludeModules) throws CoreException {
-		deepClone(c, source, target, membersToSkip, membersToKeep, reverseAssociations, excludeEntities, excludeModules, true);
+		List<String> toskip = Arrays.asList((membersToSkip + ",createdDate,changedDate").split(","));
+		deepClone(c, source, target, toskip, membersToKeep, reverseAssociations, excludeEntities, excludeModules);
 	}
 
 	/**
-	 * When includeSystemAttributes is false (or the members are otherwise excluded), __UUID__, owner and changedBy are skipped as well.
-	 * createdDate and changedDate are always skipped by deepClone. A null value is treated as true.
+	 * Like deepClone, but createdDate is copied as well. __UUID__, owner and changedBy are copied too.
+	 * changedDate is not preserved: the clone is committed, and a commit sets changedDate to the current time.
 	 */
-	public static void deepClone(IContext c, IMendixObject source, IMendixObject target, String membersToSkip, String membersToKeep, String reverseAssociations, String excludeEntities, String excludeModules, Boolean includeSystemAttributes) throws CoreException {
-		List<String> toskip = new ArrayList<String>(Arrays.asList((membersToSkip + ",createdDate,changedDate").split(",")));
-		if (Boolean.FALSE.equals(includeSystemAttributes)) {
-			toskip.addAll(SYSTEM_ATTRIBUTES);
-		}
+	public static void deepCloneWithSystemAttributes(IContext c, IMendixObject source, IMendixObject target, String membersToSkip, String membersToKeep, String reverseAssociations, String excludeEntities, String excludeModules) throws CoreException {
+		List<String> toskip = Arrays.asList(membersToSkip.split(","));
+		deepClone(c, source, target, toskip, membersToKeep, reverseAssociations, excludeEntities, excludeModules);
+	}
+
+	private static void deepClone(IContext c, IMendixObject source, IMendixObject target, List<String> toskip, String membersToKeep, String reverseAssociations, String excludeEntities, String excludeModules) throws CoreException {
 		List<String> tokeep = Arrays.asList((membersToKeep + ",System.owner,System.changedBy").split(","));
 		List<String> revAssoc = Arrays.asList(reverseAssociations.split(","));
 		List<String> skipEntities = Arrays.asList(excludeEntities.split(","));
